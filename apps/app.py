@@ -18,22 +18,8 @@ def create_app(config_key):
     csrf.init_app(app)
     db.init_app(app)
     Migrate(app, db)
-    login_manager.init_app(app)
 
-    from apps.auth import views as auth_views
-    from apps.crud import views as crud_views
-
-    app.register_blueprint(crud_views.crud, url_prefix="/crud")
-    app.register_blueprint(auth_views.auth, url_prefix="/auth")
-    app.register_error_handler(404, page_not_found)
-    app.register_error_handler(500, internal_server_error)
-
+    from apps.schejule import views as sche_views
+    
+    app.register_blueprint(sche_views.schejule, url_prefix="/schejule")
     return app
-
-
-def page_not_found(e):
-    return render_template("404.html"), 404
-
-
-def internal_server_error(e):
-    return render_template("500.html"), 500
