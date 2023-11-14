@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>schejuler</title>
+</head>
+<body>
+    <form method="POST" action="{{ url_for('schejule.channel_register') }}">
+        {{ form.csrf_token }}
+        <label for="post_content">投稿内容:</label>
+        {{ form.channel_url(size=50, placeholder="channel URL") }}
+        <br>
+        {{ form.submit() }}
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{ messages[0] }}");
+        </script>
+    {% endif %}
+{% endwith %}
+
+
+    <h1>schejuler</h1>
+
+    {% for date, stream in date_group.items() %}
+        <h2>{{ date }}</h2>
+        <ul>
+            {% for entry in stream %}
+                <li></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</body>
+</html>
