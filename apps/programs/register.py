@@ -1,11 +1,9 @@
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from apps.app import db
 from apps.schejule.models import Channel
 import json
-from ast import keyword
-import re
 from flask import flash
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 DEVELOPER_KEY = "AIzaSyAX_Q6kIbXlUuV6BIwfjaA5IZipMhchWn8"
 DEVELOPER_KEY2 = "AIzaSyC6VAjJ_pxJ9MwFKzB93o55r0y1FFiRa-4"

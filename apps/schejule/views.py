@@ -41,8 +41,7 @@ def channel_register():
     form = RegisterForm()
     if form.validate_on_submit():
         url = form.channel_url.data
-        channel_info = register.GetChannelInfo(url)
-        dbmanage.RegisterChannel(channel_info)
+        dbmanage.RegisterChannel(url)
         return redirect(url_for("schejule.index"))
     flash("チャンネルの形式がおかしいです！")
     return redirect(url_for("schejule.index")) 
