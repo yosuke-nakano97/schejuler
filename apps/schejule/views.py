@@ -3,7 +3,6 @@ from datetime import datetime
 from apps.schejule.forms import RegisterForm
 from apps.schejule.models import  Channel, Stream
 import apps.schejule.dbmanage as dbmanage
-import apps.programs.register as register
 from apps.app import db
 
 schejule = Blueprint(
@@ -22,11 +21,11 @@ def index():
     )
 
     date_group = {}
-    for stream in streams:
-        date_key = stream.starttime.date()
-        if date_key not in date_group:
-            date_group[date_key] = []
-        date_group[date_key].append(stream)
+    # for stream in streams:
+    #     date_key = stream.starttime.data()
+    #     if date_key not in date_group:
+    #         date_group[date_key] = []
+    #     date_group[date_key].append(stream)
 
     form = RegisterForm()
 
@@ -44,4 +43,10 @@ def channel_register():
         dbmanage.RegisterChannel(url)
         return redirect(url_for("schejule.index"))
     flash("チャンネルの形式がおかしいです！")
+    return redirect(url_for("schejule.index")) 
+
+@schejule.route("/update", methods=["POST"])
+def stream_update():
+    dbmanage.UpdateStream()
+    
     return redirect(url_for("schejule.index")) 
