@@ -3,8 +3,10 @@ from apps.schejule.models import Channel,Stream
 import apps.programs.channel as ch
 import apps.programs.stream as st
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import and_
 from flask import flash
 from datetime import datetime
+import pytz
 
 
 def RegisterChannel(url):
@@ -62,17 +64,21 @@ def UpdateChannel(info):
 def UpdateStream():
     # 今の時間よりもStarttimeが遅いものを削除する
     try:
-        current_time = datetime.now()
-        db.session.query(Stream).filter(starttime < current_time).delete()
+        system_timezone = pytz.timezone('Asia/Jakarta')
+        current_time=datetime.now()
+        current_time_jst_minus_two = current_time.astimezone(system_timezone)
+        db.session.query(Stream).filter(Stream.starttime < current_time_jst_minus_two).delete()
         db.session.commit()
-        
 
     except Exception as e:
+        # 削除で問題発生
         db.session.rollback()
         print(f"UpdateSteam:delete{e}")
+
     finally:
         db.session.close()
         
+    # チャンネルIDもらってビデオIDもらって登録する
     channels = db.session.query(Channel).all()
     for channel in channels:
         print(channel)
@@ -101,9 +107,11 @@ def RegisterStream(info,ch_id):
         return 0
 
     except Exception as e:
-        db.session.rollback()
         # IDとそれに対応するデーターがもうあった場合：
+        db.session.rollback()
+        # 更新処理
         if (UpdateStreamInfo(info)!=0):
+            # 更新が失敗
             flash("something wrong in Register Stream")
         return 1
 
@@ -127,16 +135,14 @@ def UpdateStreamInfo(info):
     try:
         print(info[0])
         stream = db.session.query(Stream).filter_by(id=info[0]).first()
-        print(id)
-        print(stream)
         stream.title = info[1]
         stream.thumbnail_path = info[3]
         stream.starttime = info[2]
         db.session.commit()
         flash("更新完了")
-        return 1
+        return 0
     except Exception as e:
         db.session.rollback()
         flash("something wrong in UpdatestreamInfo")
         print(f"errorrrrrrrrrrrrrrrrrrrr{e}")
-        return 0
+        return 1

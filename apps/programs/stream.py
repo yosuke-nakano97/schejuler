@@ -54,6 +54,8 @@ def GetstreamInfo(video_id):
             thumbnail_url = thumbnail['url']
             stream_info =[video_id,title,time,thumbnail_url]
             return stream_info
+        else:
+            return None
             
     except HttpError:
         print("request was denied")

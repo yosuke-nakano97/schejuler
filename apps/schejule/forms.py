@@ -9,4 +9,4 @@ class RegisterForm(FlaskForm):
             URL(message="incorrect url")
         ],
     )
-    submit = SubmitField("upload")
+    submit = SubmitField("更新")

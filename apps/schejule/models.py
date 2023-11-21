@@ -13,6 +13,7 @@ class Channel(db.Model):
     icon_path = db.Column(db.String)
     playlist = db.Column(db.String, unique=True)
     created_at = db.Column(db.DateTime, default=current_time_jst)
+    update_at = db.Column(db.DateTime, default=current_time_jst, onupdate=current_time_jst)
     stream = db.relationship("Stream", backref="channel", order_by="desc(Stream.starttime)")
 
 class Stream(db.Model):
