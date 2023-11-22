@@ -20,6 +20,7 @@ def index():
         .order_by(Stream.starttime.asc())
         .all()
     )
+    db.session.close()
 
     stream_group = {}
     week_info = {
@@ -61,4 +62,20 @@ def channel_register():
 def stream_update():
     dbmanage.UpdateStream()
     
+    return redirect(url_for("schejule.index")) 
+
+@schejule.route("/select")
+def select_channel():
+    channels = db.session.query(Channel).all()
+    form = RegisterForm()
+
+    return render_template(
+        "schejule/select.html",
+        channels=channels,
+        form=form
+    )
+
+@schejule.route("/delete/<channel_id>", methods=["POST","GET"])
+def delete_channel(channel_id):
+    dbmanage.DeleteChannel(channel_id)
     return redirect(url_for("schejule.index")) 

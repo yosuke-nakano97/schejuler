@@ -1,4 +1,3 @@
-from ast import keyword
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import datetime
@@ -45,7 +44,11 @@ def GetstreamInfo(video_id):
             #time
             liveStreamingDetails = item['liveStreamingDetails']
             time = liveStreamingDetails['scheduledStartTime']
+            # 開始時刻が今から１週間いないかどうか
+            now = datetime.datetime.now()
             time = TimeCalibration(time)
+            if time - now > datetime.timedelta(weeks=1):
+                return None
             #title
             title = snippet['title']
             #thumbnail
@@ -59,6 +62,11 @@ def GetstreamInfo(video_id):
             
     except HttpError:
         print("request was denied")
+        return None
+
+    except KeyError:
+        return None
+
 
 # calculate JPT
 def TimeCalibration(time):

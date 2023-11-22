@@ -34,17 +34,26 @@ def RegisterChannel(url):
             db.session.close()
        
 def DeleteChannel(ch_id):
-    # IDをもらってきて対応するレコードを削除
+    print(ch_id)
+    
     try:
-        db.session.delete(
-            session.query(Channel).filter_by(id==ch_id).first()
-        )
-        db.session.commit()
-        db.session.close()
+        # IDをもらってきて対応するレコードを削除
+        channel = db.session.query(Channel).filter_by(id=ch_id).first()
+        # あった
+        if channel:
+            db.session.delete(channel)
+            db.session.commit()
+            flash("Channel deleted successfully.")
+        # ない
+        else:
+            flash("Channel not found.")
 
     except Exception as e:
-        flash("something wrong in DeleteChannel")
+        flash("Something went wrong in DeleteChannel")
         print(e)
+
+    finally:
+        db.session.close()
 
 def UpdateChannel(info):
     try:
