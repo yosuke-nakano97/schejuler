@@ -1,17 +1,13 @@
+from apps.app import youtubeinfo 
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import datetime
 
-DEVELOPER_KEY = "AIzaSyAX_Q6kIbXlUuV6BIwfjaA5IZipMhchWn8"
-DEVELOPER_KEY2 = "AIzaSyC6VAjJ_pxJ9MwFKzB93o55r0y1FFiRa-4"
-
-#Youtubeapi 
-YOUTUBE_API_SERVICE_NAME = "youtube"
-YOUTUBE_API_VERSION = "v3"
-youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey = DEVELOPER_KEY2,  cache_discovery=False)
+youtube = youtubeinfo.BuildApiService()
 
 def GetRecentVideoId(playlist_id):
     try:
+        youtubeinfo.QuotaSub(1)
         respond =youtube.playlistItems().list(
             part = "contentDetails",
             playlistId = playlist_id,
@@ -29,6 +25,7 @@ def GetRecentVideoId(playlist_id):
 
 def GetstreamInfo(video_id):
     try:
+        youtubeinfo.QuotaSub(1)
         respond =youtube.videos().list(
             part = "liveStreamingDetails,snippet",
             id = video_id

@@ -4,6 +4,7 @@ from apps.schejule.forms import RegisterForm
 from apps.schejule.models import  Channel, Stream
 import apps.schejule.dbmanage as dbmanage
 from apps.app import db
+from apps.app import youtubeinfo
 
 schejule = Blueprint(
     "schejule",
@@ -41,6 +42,7 @@ def index():
         stream_group[starttime_date]['streams'].append(stream)
 
     form = RegisterForm()
+    print(f"{youtubeinfo.quota}")
 
     return render_template(
         "schejule/index.html",
