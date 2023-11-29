@@ -67,6 +67,10 @@ def DeleteChannel(ch_id):
         channel = db.session.query(Channel).filter_by(id=ch_id).first()
         # あった
         if channel:
+            related_streams = db.session.query(Stream).filter_by(channel_id=ch_id).all()
+            if related_streams:
+                for stream in related_streams:
+                    db.session.delete(stream)
             db.session.delete(channel)
             db.session.commit()
             flash("Channel deleted successfully.")
